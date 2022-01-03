@@ -15,6 +15,91 @@ public protocol SyncDelegate: class {
 
 @objcMembers
 @objc public class Sync: Operation {
+	
+	public enum EnumSyncPrimaryKey {
+		case `default`, localKey, tag
+	}
+	
+	public static let localModels: [String] = [
+		"AdditionalInfoNature",
+		"AdditionalInfoTemplate",
+		"AdditionalInfoType",
+		"ClientAdditionalInfo",
+		"ClientAdditionalInfoValue",
+		"CmdClientAdditionalInfo",
+		"BilletAcion",
+		"CaisseOperation",
+		"CalendarDayEntity",
+		"CalendarDayEntityRate",
+		"Client",
+		"ClientCaisseOperation",
+		"ClientSubscriptionProduct",
+		"DeviceMetricEvent",
+		"CmdClient",
+		"CmdClientEvn",
+		"CmdClientPackage",
+		"CmdInstruction",
+		"CmdPrdCnsPrcpl",
+		"CmdPrdCnsPrcplException",
+		"CmdPrdCnsPrcplSupp",
+		"CmdPrdCnsTiers",
+		"CmdPrdCnsTiersException",
+		"CmdPrdCnsTiersSupp",
+		"CmdPrdPrcplPrdTiers",
+		"CmdSupplement",
+		"OperationTransaction",
+		"SerialNumber",
+		"StockOperation",
+		"StockOperationPackage",
+		"StockOperationPrd",
+		"LabPlanning",
+		"PlanningLine",
+		"CmdRemise",
+		"StoredFile",
+	]
+
+	public static let taggedModels: [String] = [
+		"Role",
+		
+		"EtatCmd",
+		"CaisseOperationTypeDAO",
+		"ModePaiementDAO",
+		"BilletTypeDAO",
+		
+		"AdditionalInfoNatureDAO",
+		"AdditionalInfoTypeDAO",
+		"EtatCmdDAO",
+		"TypeCmdDAO",
+		"TypeRemiseDAO",
+		"PaperSizeDAO",
+		
+		"StockOperationTypeUnityDAO",
+		"StockOperationTypeDAO",
+		"TransactionTypeDAO",
+	]
+	
+	public static var shouldUseLocalPrimaryKey: EnumSyncPrimaryKey = .default
+	public static func getShouldUseLocalPrimaryKeyBy(entityName: String) -> String? {
+		
+		switch shouldUseLocalPrimaryKey {
+			
+			case .default: return nil
+			
+			case .localKey:
+				
+				if self.localModels.contains(entityName) {
+					return "localKey"
+				}
+				return nil
+			case .tag:
+				
+				if self.taggedModels.contains(entityName) {
+					return "tag"
+				}
+				return nil
+		}
+	}
+
     public weak var delegate: SyncDelegate?
 
     public struct OperationOptions: OptionSet {
